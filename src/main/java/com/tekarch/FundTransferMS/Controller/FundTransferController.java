@@ -9,10 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/transfers")
+@RequestMapping("/api/fund-transfer")
 public class FundTransferController {
 
     @Autowired
@@ -25,7 +26,7 @@ public class FundTransferController {
 //    }
 
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<?> createTransfer(
             @RequestParam Long senderAccountId,
             @RequestParam Long receiverAccountId,
@@ -43,4 +44,27 @@ public class FundTransferController {
         Optional<FundTransfer> transfer = fundTransferService.getTransfer(transferId);
         return transfer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+    @GetMapping()
+    public ResponseEntity<?> getTransfersByStatus(@RequestParam(required = false) String status) {
+        try {
+            if (status != null) {
+                List<FundTransfer> transfers = fundTransferService.getTransfersByStatus(status);
+                return ResponseEntity.ok(transfers);
+            } else {
+                return ResponseEntity.badRequest().body("Status parameter is required.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error fetching transfers: " + e.getMessage());
+        }
+    }
+    @GetMapping("/fund-transfers")
+    public ResponseEntity<?> getAllFundTransfers() {
+        try {
+            List<FundTransfer> transfers = fundTransferService.getAllTransfers();
+            return ResponseEntity.ok(transfers);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error fetching fund transfers: " + e.getMessage());
+        }
+    }
+
 }
