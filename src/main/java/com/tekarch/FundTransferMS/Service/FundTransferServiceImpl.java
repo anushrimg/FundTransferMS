@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,6 +48,11 @@ public class FundTransferServiceImpl implements FundTransferService {
         return fundTransferRepository.findById(transferId);
     }
 
-
+    public List<FundTransfer> getTransfersByStatus(String status) {
+        return fundTransferRepository.findByStatus(status);
+    }
+    public List<FundTransfer> getAllTransfers() {
+        return fundTransferRepository.findAll();
+    }
 
 }
