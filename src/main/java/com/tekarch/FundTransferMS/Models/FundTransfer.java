@@ -9,28 +9,27 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table
-public class Transfer {
+public class FundTransfer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transferId;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false)
-    private Account senderAccount;
-
-    @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false)
-    private Account receiverAccount;
+    @Column(nullable = false)
+    private Long senderAccountId;
 
     @Column(nullable = false)
+    private Long receiverAccountId;
+
+    @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal amount;
 
-    @Column(length = 20, nullable = false)
+    @Column(nullable = false, length = 20)
     private String status = "pending";
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime initiatedAt = LocalDateTime.now();
 
     private LocalDateTime completedAt;
+
 }
